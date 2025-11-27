@@ -6,12 +6,12 @@ import math
 pygame.init()
 pygame.mixer.init()
 
-# === Настройки окна ===
+# Настройки окна 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Artis Impact - Lite 123")
 
-# === Цвета ===
+#  Цвета 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (100, 100, 100)
@@ -23,14 +23,14 @@ PURPLE = (180, 60, 200)
 YELLOW = (255, 220, 60)
 CYAN = (0, 255, 255)
 
-# === Настройки ===
+# Настройки 
 class Settings:
     def __init__(self):
         self.volume = 50
 
 settings = Settings()
 
-# === Локации ===
+# Локации 
 LOCATIONS = {
     "forest": (34, 139, 34),
     "desert": (210, 180, 140),
@@ -38,14 +38,14 @@ LOCATIONS = {
 }
 current_location = "forest"
 
-# === Игрок ===
+
 class Player:
     def __init__(self):
         self.x = SCREEN_WIDTH // 2
         self.y = SCREEN_HEIGHT // 2
         self.size = 40
         self.speed = 5
-        self.alpha = 255  # для прозрачности
+        self.alpha = 255  #прозрачностm
 
     def move(self, dx, dy):
         self.x = max(0, min(SCREEN_WIDTH - self.size, self.x + dx))
@@ -75,7 +75,7 @@ class Player:
 
 player = Player()
 
-# === Снаряд (для мага и босса) ===
+# Снаряд (для мага и босса) 
 class Projectile:
     def __init__(self, x, y, dx, dy, speed, color, radius=6, lifetime=5.0):
         self.x = x
@@ -101,7 +101,7 @@ class Projectile:
     def collides_with_player(self, player):
         return player.collides_with_circle(self.x, self.y, self.radius)
 
-# === Обычные враги ===
+#Обычные враги 
 class Enemy:
     def __init__(self, name, color, speed, has_ranged=False):
         self.name = name
@@ -152,7 +152,7 @@ class Enemy:
         for proj in self.projectiles:
             proj.draw(surface)
 
-# === Босс ===
+# Босс 
 class Boss:
     def __init__(self):
         self.size = 80
@@ -261,20 +261,20 @@ class Boss:
         for proj in self.projectiles:
             proj.draw(surface)
 
-# === UI ===
-font = pygame.font.SysFont(None, 72)  # Большой шрифт для YOU DIED
+# UI 
+font = pygame.font.SysFont(None, 72)  # Большой шрифт для вывода смерти
 small_font = pygame.font.SysFont(None, 28)
 
-# === Состояния ===
+#  Состояния
 STATE_MENU = "menu"
 STATE_LOCATIONS = "locations"
 STATE_SETTINGS = "settings"
 STATE_GAME = "game"
-STATE_DYING = "dying"      # Новое состояние!
+STATE_DYING = "dying"      
 STATE_GAME_OVER = "game_over"
 current_state = STATE_MENU
 
-# === Кнопки ===
+# Кнопки 
 class Button:
     def __init__(self, x, y, w, h, text, font_size=36):
         self.font = pygame.font.SysFont(None, font_size)
@@ -299,7 +299,7 @@ class Slider:
         self.value = max(0, min(100, rel * 100))
         settings.volume = int(self.value)
 
-# === Кнопки ===
+#  Кнопки v2
 play_btn = Button(300, 180, 200, 50, "Играть")
 loc_btn = Button(300, 250, 200, 50, "Локации")
 set_btn = Button(300, 320, 200, 50, "Настройки")
@@ -312,11 +312,11 @@ loc_buttons = [
 ]
 vol_slider = Slider(200, 250, 400, 20)
 
-# === Игровые данные ===
+#  Игровые данные
 enemy_types = [
-    {"name": "Гоблин", "color": RED, "speed": 3.0, "ranged": False},
-    {"name": "Орк", "color": ORANGE, "speed": 3.5, "ranged": False},
-    {"name": "Маг", "color": (100, 100, 255), "speed": 2.5, "ranged": True},
+    {"name": "Дуралей", "color": RED, "speed": 3.0, "ranged": False},
+    {"name": "придумать имя надо", "color": ORANGE, "speed": 3.5, "ranged": False},
+    {"name": "Казуал", "color": (100, 100, 255), "speed": 2.5, "ranged": True},
 ]
 
 current_enemy_index = -1
@@ -327,14 +327,14 @@ boss_fight = False
 time_limit = 15
 time_left = time_limit
 
-# === Переменные для анимации смерти ===
+# Переменные для анимации смерти
 player_fade_alpha = 255
 you_died_alpha = 0
 you_died_y = SCREEN_HEIGHT + 50  # Начинаем за пределами экрана
 dying_timer = 0
-DYING_DURATION = 3.0  # секунды на всю анимацию
+DYING_DURATION = 2.0  # секунды на всю анимацию
 
-# === Цикл ===
+#  Цикл
 clock = pygame.time.Clock()
 last_time = pygame.time.get_ticks()
 running = True
@@ -369,7 +369,7 @@ while running:
             elif current_state == STATE_GAME_OVER:
                 if back_btn.is_clicked(mouse_pos): current_state = STATE_MENU
 
-    # === Логика смерти ===
+    #  Логика смерти 
     if current_state == STATE_DYING:
         dying_timer += dt
         progress = min(dying_timer / DYING_DURATION, 1.0)
@@ -377,7 +377,7 @@ while running:
         # Исчезновение игрока
         player.alpha = max(0, 255 - int(255 * progress))
 
-        # Появление надписи YOU DIED
+        # Появление надписи 
         you_died_alpha = min(255, int(255 * progress * 1.5))
         you_died_y = SCREEN_HEIGHT - 50 - int(100 * progress)  # поднимается вверх
 
@@ -427,7 +427,7 @@ while running:
             you_died_alpha = 0
             you_died_y = SCREEN_HEIGHT + 50
 
-    # === Отрисовка ===
+    # Отрисовка 
     screen.fill(LOCATIONS[current_location])
 
     if current_state == STATE_MENU:
